@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Actual vs theoretical food cost | Morning Belle</title>
+<title>Learning Financials 101 | Morning Belle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
@@ -59,7 +59,7 @@ section{padding:clamp(56px,8vw,96px) 0}
 .note{font-size:.9rem;color:var(--ink-soft)}
 
 /* HERO */
-.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,6vw,80px);align-items:center;padding:clamp(40px,7vw,88px) 0 clamp(32px,5vw,64px)}
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,6vw,80px);align-items:center;padding-top:clamp(28px,5vw,64px);padding-bottom:clamp(32px,5vw,64px)}
 .hero h1{margin-bottom:.45em}
 .hero .lead{margin-bottom:1.4em}
 .rule{display:flex;gap:14px;align-items:flex-start;border-left:6px solid var(--gap);padding:6px 0 6px 16px;font-weight:650;font-size:1.15rem;max-width:44ch}
@@ -245,9 +245,103 @@ footer{padding:28px 0 40px;font-size:.88rem;color:var(--ink-soft)}
   .scene.on .w,.scene.on .in,.scene.on .bar,.scene.on .stamp,.scene.on .strike{animation-duration:.01ms !important;animation-delay:0ms !important}
   .sound span{animation:none;padding-left:0}
 }
+
+/* APP SHELL */
+.view[hidden]{display:none}
+.topbar{border-bottom:2px solid var(--line)}
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:60px}
+.topbar a.brandmark{font-weight:800;font-size:1.1rem;color:var(--ink);text-decoration:none;font-variation-settings:"wdth" 85;display:flex;gap:8px;align-items:center}
+.pill{font-weight:650;font-size:.92rem;background:var(--surface);border-radius:99px;padding:6px 14px;white-space:nowrap}
+.home-hero{padding-top:clamp(40px,7vw,88px);padding-bottom:clamp(24px,4vw,40px);display:grid;grid-template-columns:1.2fr .8fr;gap:clamp(28px,5vw,64px);align-items:end}
+.home-hero h1{margin-bottom:.35em}
+.meter{background:var(--surface);border-radius:18px;padding:22px 24px}
+.meter b{display:block;font-size:2.6rem;line-height:1;font-variation-settings:"wdth" 80}
+.meter small{font-weight:650;color:var(--ink-soft)}
+.track{height:12px;border-radius:99px;background:var(--line);margin-top:14px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--good);border-radius:99px;transition:width .6s ease}
+.feature{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;background:#3c5c68;color:#fff;border-radius:22px;padding:clamp(20px,3vw,32px);text-decoration:none;margin-bottom:clamp(40px,6vw,64px)}
+.feature .num{font-size:clamp(3.4rem,8vw,5.6rem);font-weight:800;line-height:.85;color:#ffde5c;font-variation-settings:"wdth" 75}
+.feature h2{color:#fff;margin:0 0 .2em;font-size:clamp(1.5rem,3vw,2.2rem)}
+.feature p{margin:0;color:#e6f0ec}
+.btn{display:inline-flex;align-items:center;gap:8px;font:inherit;font-weight:750;font-size:1.05rem;border:0;border-radius:99px;padding:12px 22px;background:#ffde5c;color:#24363d;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+.syllabus{list-style:none;margin:16px 0 0;padding:0;border-top:2px solid var(--line)}
+.syllabus li{display:grid;grid-template-columns:56px 1fr auto;gap:4px 16px;align-items:center;padding:18px 0;border-bottom:2px solid var(--line)}
+.syllabus .n{grid-row:span 2;font-size:2.2rem;font-weight:800;color:var(--theo);font-variation-settings:"wdth" 75;line-height:1}
+.syllabus h3{margin:0;font-size:1.2rem}
+.syllabus p{margin:0;color:var(--ink-soft);font-size:.98rem;grid-column:2}
+.syllabus .status{grid-row:1/span 2;grid-column:3;font-weight:700;font-size:.92rem}
+.syllabus li.soon{opacity:.62}
+.syllabus a{color:inherit;text-decoration:none}
+.syllabus a:hover h3{text-decoration:underline}
+.status.done{color:var(--good)}
+.classbar{padding-top:22px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-weight:650}
+.classbar a{color:var(--ink)}
+.classbar span{color:var(--ink-soft)}
+.classbar .done-tag{color:var(--good)}
+
+/* QUIZ */
+.quiz{background:var(--surface);border-radius:22px;padding:clamp(22px,4vw,44px)}
+.quiz fieldset{border:0;margin:0 0 26px;padding:0}
+.quiz legend{font-weight:750;font-size:1.15rem;margin-bottom:10px;padding:0;max-width:60ch}
+.opt{display:flex;flex-direction:row;align-items:flex-start;gap:12px;font-weight:550;padding:10px 12px;border-radius:12px;border:2px solid transparent;cursor:pointer;max-width:62ch}
+.opt:hover{background:var(--bg)}
+.opt input{width:auto;margin-top:5px;accent-color:#3c5c68}
+.opt.right{border-color:var(--good)}
+.opt.wrong{border-color:var(--gap)}
+.why{margin:6px 0 0 12px;font-size:.96rem;color:var(--ink-soft)}
+.quiz-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.result-msg{font-weight:750;font-size:1.15rem;margin:18px 0 0}
+.result-msg.pass{color:var(--good)}
+.result-msg.fail{color:var(--gap)}
+@media (max-width:860px){
+  .home-hero{grid-template-columns:1fr}
+  .feature{grid-template-columns:auto 1fr}
+  .feature .btn{grid-column:1/-1;justify-self:start}
+}
 </style>
 </head>
 <body>
+
+<div class="topbar"><div class="wrap">
+  <a class="brandmark" href="#home">🌱 Learning Financials 101</a>
+  <span class="pill" id="pill">0 of 9 complete</span>
+</div></div>
+
+<div class="view" id="view-home">
+  <div class="wrap">
+    <div class="home-hero">
+      <div>
+        <h1>Learning Financials 101</h1>
+        <p class="lead">Nine short classes on the numbers that decide whether a great shift becomes a great period. Watch the video, read the class, try the calculator, pass the check.</p>
+      </div>
+      <div class="meter">
+        <small>Your progress</small>
+        <b id="meter-num">0 of 9</b>
+        <small>classes complete</small>
+        <div class="track"><i id="meter-bar"></i></div>
+      </div>
+    </div>
+
+    <a class="feature" href="#class-1">
+      <span class="num">1</span>
+      <div>
+        <h2>Actual vs theoretical food cost</h2>
+        <p>Why the bank only takes actual, and how to close the gap. About 12 minutes.</p>
+      </div>
+      <span class="btn" id="feature-cta">Start class 1</span>
+    </a>
+
+    <h2>The course</h2>
+    <ol class="syllabus" id="syllabus"></ol>
+    <p class="note" style="margin-top:22px">New classes unlock as they are released. Progress is saved on this device.</p>
+  </div>
+</div>
+
+<div class="view" id="view-class-1" hidden>
+<div class="wrap classbar">
+  <a href="#home">All classes</a><span>Class 1 of 9</span><span>About 12 minutes</span><span class="done-tag" id="c1-tag"></span>
+</div>
 
 <header class="wrap hero">
   <div>
@@ -536,6 +630,20 @@ footer{padding:28px 0 40px;font-size:.88rem;color:var(--ink-soft)}
 </section>
 </main>
 
+
+<section class="wrap" id="check" style="padding-top:0">
+  <h2>Check your knowledge</h2>
+  <p class="lead">Five questions. Get four right to complete the class.</p>
+  <form class="quiz" id="quiz" onsubmit="return false">
+    <div id="qs"></div>
+    <div class="quiz-actions">
+      <button type="button" class="btn" id="check-btn">Check my answers</button>
+      <button type="button" class="btn ghost" id="retry-btn" hidden>Try again</button>
+      <a class="btn ghost" href="#home" id="back-btn" hidden>Back to all classes</a>
+    </div>
+    <p class="result-msg" id="result" aria-live="polite"></p>
+  </form>
+</section>
 <section class="close">
   <div class="wrap">
     <h2>Fix the system on Monday. Close the gap today.</h2>
@@ -544,6 +652,7 @@ footer{padding:28px 0 40px;font-size:.88rem;color:var(--ink-soft)}
 </section>
 
 <footer class="wrap">Morning Belle kitchen leadership. Example numbers on this page are illustrations, not restaurant results.</footer>
+</div>
 
 <script>
 (function(){
@@ -623,6 +732,7 @@ footer{padding:28px 0 40px;font-size:.88rem;color:var(--ink-soft)}
   const like=document.getElementById('like');
   like.addEventListener('click',()=>{const on=like.classList.toggle('liked');like.setAttribute('aria-pressed',on);});
   show(0);requestAnimationFrame(tick);
+  window.mbVideo={pause:()=>{if(playing)pause();}};
   if(!reduce&&'IntersectionObserver' in window){
     const io=new IntersectionObserver(es=>{es.forEach(en=>{
       if(en.isIntersecting&&!started){play();}
@@ -646,6 +756,107 @@ footer{padding:28px 0 40px;font-size:.88rem;color:var(--ink-soft)}
   }
   ['sales','theo','act'].forEach(id=>$(id).addEventListener('input',calc));
   calc();
+})();
+</script>
+
+<script>
+(function(){
+  const COURSE=[
+    {id:'c1',title:'Actual vs theoretical food cost',blurb:'Why the bank only takes actual, and how to close the gap.',href:'#class-1'},
+    {id:'c2',title:'What is food cost',blurb:'What counts, what doesn\u2019t, and how the percentage is calculated.'},
+    {id:'c3',title:'Prime cost',blurb:'The only number that tells the truth. Food and labor, managed together.'},
+    {id:'c4',title:'Labor',blurb:'Scheduled vs actual, and where hours leak between the schedule and the punch.'},
+    {id:'c5',title:'Reading the P&L top to bottom',blurb:'Sales, cost of goods, labor, controllables, and what lands at the bottom.'},
+    {id:'c6',title:'Controllable expenses',blurb:'Supplies, smallwares, repairs, and the lines managers actually own.'},
+    {id:'c7',title:'Sales, comps, and check average',blurb:'How every comp and every upsell shows up in the numbers.'},
+    {id:'c8',title:'Cash flow vs profit',blurb:'Why a profitable period can still feel tight in the bank.'},
+    {id:'c9',title:'Your weekly flash',blurb:'Read the weekly report in five minutes and know what to fix first.'}
+  ];
+  const KEY='mbFin101.v1';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||{complete:{}};}catch(e){return {complete:{}};}}
+  function save(s){try{localStorage.setItem(KEY,JSON.stringify(s));}catch(e){}}
+  let state=load(); if(!state.complete)state.complete={};
+
+  function renderHome(){
+    const done=COURSE.filter(c=>state.complete[c.id]).length;
+    document.getElementById('pill').textContent=done+' of '+COURSE.length+' complete';
+    document.getElementById('meter-num').textContent=done+' of '+COURSE.length;
+    document.getElementById('meter-bar').style.width=(done/COURSE.length*100)+'%';
+    document.getElementById('feature-cta').textContent=state.complete.c1?'Review class 1':'Start class 1';
+    document.getElementById('c1-tag').textContent=state.complete.c1?'Complete 🌱':'';
+    const ol=document.getElementById('syllabus');ol.innerHTML='';
+    COURSE.forEach((c,i)=>{
+      const li=document.createElement('li');
+      const isDone=!!state.complete[c.id];
+      if(!c.href)li.className='soon';
+      const title=c.href?'<a href="'+c.href+'"><h3>'+c.title+'</h3></a>':'<h3>'+c.title+'</h3>';
+      const status=isDone?'<span class="status done">Complete</span>':c.href?'<span class="status">Open</span>':'<span class="status">Coming soon</span>';
+      li.innerHTML='<span class="n">'+(i+1)+'</span>'+title+'<p>'+c.blurb+'</p>'+status;
+      ol.appendChild(li);
+    });
+  }
+
+  const QUESTIONS=[
+    {q:'Which number matches the money that actually left our account?',o:['Theoretical food cost','Actual food cost','Variance'],a:1,why:'Actual is built from invoices and counts. It is what we paid.'},
+    {q:'Theoretical food cost assumes:',o:['Perfect portions, zero waste, accurate recipe costs, every comp rung','Last period\u2019s waste and comps carry forward','Whatever the inventory count says'],a:0,why:'Theoretical is the floor we could hit if the kitchen ran perfectly.'},
+    {q:'Weekly food sales are $25,000. Theoretical is 30.0%. Actual is 31.5%. What does the gap cost per week?',o:['$150','$375','$750'],a:1,why:'1.5 points times $25,000 is $375 a week, about $19,500 a year.'},
+    {q:'You think the theoretical cost on one menu item is wrong. What comes first?',o:['Hold off on coaching until the system is fixed','Flag the item for a recipe check and keep managing actual every shift','Ignore the food cost report this period'],a:1,why:'Fixing the system is a weekly task. Managing actual happens every shift, no matter what.'},
+    {q:'Actual comes in under theoretical. What is the most likely explanation?',o:['The kitchen beat perfect','A counting or receiving error','Prices went down'],a:1,why:'Beating a perfect recipe is rare. Check the count and receiving before celebrating.'}
+  ];
+  const qs=document.getElementById('qs');
+  QUESTIONS.forEach((item,qi)=>{
+    const fs=document.createElement('fieldset');
+    let h='<legend>'+(qi+1)+'. '+item.q+'</legend>';
+    item.o.forEach((opt,oi)=>{h+='<label class="opt"><input type="radio" name="q'+qi+'" value="'+oi+'"><span>'+opt+'</span></label>';});
+    h+='<p class="why" hidden></p>';
+    fs.innerHTML=h;qs.appendChild(fs);
+  });
+  const result=document.getElementById('result');
+  const checkBtn=document.getElementById('check-btn'),retryBtn=document.getElementById('retry-btn'),backBtn=document.getElementById('back-btn');
+  checkBtn.addEventListener('click',()=>{
+    let score=0,answered=0;
+    QUESTIONS.forEach((item,qi)=>{
+      const fs=qs.children[qi];
+      const pick=fs.querySelector('input:checked');
+      fs.querySelectorAll('.opt').forEach(l=>l.classList.remove('right','wrong'));
+      const why=fs.querySelector('.why');
+      if(pick){answered++;
+        const v=+pick.value;
+        if(v===item.a){score++;pick.closest('.opt').classList.add('right');why.textContent='Right. '+item.why;}
+        else{pick.closest('.opt').classList.add('wrong');why.textContent='Not quite. '+item.why;}
+        why.hidden=false;
+      }
+    });
+    if(answered<QUESTIONS.length){result.className='result-msg fail';result.textContent='Answer all five questions, then check again.';return;}
+    qs.querySelectorAll('input').forEach(i=>i.disabled=true);
+    checkBtn.hidden=true;
+    if(score>=4){
+      state.complete.c1=true;save(state);renderHome();
+      result.className='result-msg pass';result.textContent=score+' of 5. Class 1 complete 🌱';
+      backBtn.hidden=false;retryBtn.hidden=true;
+    }else{
+      result.className='result-msg fail';result.textContent=score+' of 5. You need 4 to complete the class. Review the explanations and try again.';
+      retryBtn.hidden=false;
+    }
+  });
+  retryBtn.addEventListener('click',()=>{
+    qs.querySelectorAll('input').forEach(i=>{i.disabled=false;i.checked=false;});
+    qs.querySelectorAll('.opt').forEach(l=>l.classList.remove('right','wrong'));
+    qs.querySelectorAll('.why').forEach(w=>{w.hidden=true;w.textContent='';});
+    result.textContent='';checkBtn.hidden=false;retryBtn.hidden=true;backBtn.hidden=true;
+  });
+
+  const views={home:document.getElementById('view-home'),'class-1':document.getElementById('view-class-1')};
+  function route(){
+    const h=location.hash.replace('#','');
+    const key=views[h]?h:'home';
+    Object.entries(views).forEach(([k,el])=>el.hidden=k!==key);
+    if(key!=='class-1'&&window.mbVideo)window.mbVideo.pause();
+    renderHome();
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',route);
+  route();
 })();
 </script>
 </body>
