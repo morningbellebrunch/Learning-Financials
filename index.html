@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Actual vs theoretical food cost | Morning Belle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;
+  --surface:#eef6f3;
+  --surface-2:#fff8dc;
+  --ink:#2c454f;
+  --ink-soft:#4d4d4d;
+  --line:#d3e3de;
+  --theo:#9bc4bc;
+  --act:#3c5c68;
+  --gap:#f46e3b;
+  --good:#5f8f2e;
+  --focus:#f46e3b;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#18262c;
+    --surface:#203339;
+    --surface-2:#2a3a2f;
+    --ink:#eef4f1;
+    --ink-soft:#c3d1cd;
+    --line:#35505a;
+    --theo:#9bc4bc;
+    --act:#e6f0ec;
+    --gap:#fc826d;
+    --good:#b5dc86;
+    --focus:#ffde5c;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#18262c;--surface:#203339;--surface-2:#2a3a2f;--ink:#eef4f1;--ink-soft:#c3d1cd;--line:#35505a;
+  --theo:#9bc4bc;--act:#e6f0ec;--gap:#fc826d;--good:#b5dc86;--focus:#ffde5c;color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-optical-sizing:auto;font-size:1.0625rem;line-height:1.6}
+img,svg{max-width:100%}
+:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+p{margin:0 0 1em;max-width:62ch}
+h1,h2,h3{margin:0;line-height:1.05;font-variation-settings:"wdth" 82}
+h1{font-size:clamp(2.7rem,6.4vw,4.9rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.9rem,3.8vw,2.8rem);font-weight:760;letter-spacing:-.015em;margin-bottom:.5em}
+h3{font-size:1.3rem;font-weight:700;margin-bottom:.35em;font-variation-settings:"wdth" 90}
+section{padding:clamp(56px,8vw,96px) 0}
+.lead{font-size:clamp(1.15rem,1.6vw,1.3rem);color:var(--ink-soft)}
+.note{font-size:.9rem;color:var(--ink-soft)}
+
+/* HERO */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(32px,6vw,80px);align-items:center;padding:clamp(40px,7vw,88px) 0 clamp(32px,5vw,64px)}
+.hero h1{margin-bottom:.45em}
+.hero .lead{margin-bottom:1.4em}
+.rule{display:flex;gap:14px;align-items:flex-start;border-left:6px solid var(--gap);padding:6px 0 6px 16px;font-weight:650;font-size:1.15rem;max-width:44ch}
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:14px}
+details.script{width:min(340px,100%);font-size:.95rem;color:var(--ink-soft)}
+details.script summary{cursor:pointer;font-weight:650;color:var(--ink)}
+details.script ol{padding-left:1.2em;margin:.6em 0 0}
+details.script li{margin-bottom:.35em}
+
+/* VIDEO STAGE (fixed media colors, theme independent) */
+.stage{position:relative;width:min(340px,100%);aspect-ratio:9/16;border-radius:28px;overflow:hidden;background:#1d2f36;container-type:inline-size;box-shadow:0 0 0 8px #24363d, 0 0 0 9px #3c5c68;user-select:none;-webkit-user-select:none;cursor:pointer;color:#fff;font-variation-settings:"wdth" 85}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:16cqw 9cqw 30cqw;gap:4cqw;opacity:0;visibility:hidden}
+.scene.on{opacity:1;visibility:visible}
+.s-teal{background:#3c5c68}
+.s-deep{background:#24363d}
+.s-sage{background:#9bc4bc;color:#24363d}
+.s-yellow{background:#ffde5c;color:#24363d}
+.s-green{background:#99c961;color:#24363d}
+.s-coral{background:#fc826d;color:#24363d}
+.cap{margin:0;font-weight:800;font-size:9.6cqw;line-height:1.08;max-width:none;text-shadow:0 .5cqw 0 rgba(0,0,0,.28)}
+.s-sage .cap,.s-yellow .cap,.s-green .cap,.s-coral .cap{text-shadow:none}
+.cap.sm{font-size:7cqw}
+.cap.hl .w{background:#ffde5c;color:#24363d;padding:0 1.2cqw;border-radius:1.6cqw;margin:.4cqw 0}
+.s-yellow .cap.hl .w,.s-green .cap.hl .w{background:#24363d;color:#ffde5c}
+.kicker{font-size:5.2cqw;font-weight:600;opacity:.9;max-width:none;margin:0}
+.chip{display:inline-block;font-weight:800;font-size:6cqw;padding:1.4cqw 4cqw;border-radius:99px;background:#fff;color:#24363d}
+.chip.dark{background:#24363d;color:#ffde5c}
+.w{display:inline-block;opacity:0}
+.in{opacity:0}
+.scene.on .w{animation:pop .42s cubic-bezier(.2,1.5,.45,1) both;animation-delay:var(--d,0ms)}
+.scene.on .in{animation:rise .5s cubic-bezier(.2,1.2,.4,1) both;animation-delay:var(--d,0ms)}
+@keyframes pop{0%{opacity:0;transform:scale(.55) translateY(30%)}70%{opacity:1;transform:scale(1.08)}100%{opacity:1;transform:none}}
+@keyframes rise{0%{opacity:0;transform:translateY(25%) scale(.92)}100%{opacity:1;transform:none}}
+
+.eq{display:flex;align-items:center;gap:2.4cqw;font-weight:800}
+.tile{background:#fff;color:#24363d;border-radius:3cqw;padding:3cqw 2.6cqw;font-size:4.6cqw;line-height:1.15;min-width:22cqw}
+.tile b{display:block;font-size:9cqw}
+.op{font-size:8cqw}
+.result{font-size:14cqw;font-weight:800;color:#24363d}
+.ledger{width:100%;background:#fff;color:#24363d;border-radius:4cqw;padding:4cqw 5cqw;text-align:left;font-size:5.2cqw;font-weight:650}
+.ledger div{display:flex;justify-content:space-between;padding:1.4cqw 0;border-bottom:.4cqw dashed #9bc4bc}
+.ledger div:last-child{border:0;font-weight:800;font-size:7cqw;color:#d57136}
+
+.bars{display:flex;align-items:flex-end;gap:7cqw;height:62cqw;position:relative;padding-top:4cqw}
+.bar{width:22cqw;border-radius:2.4cqw 2.4cqw 0 0;position:relative;transform-origin:bottom;transform:scaleY(0)}
+.scene.on .bar{animation:grow .9s cubic-bezier(.2,1,.3,1) forwards;animation-delay:var(--d,0ms)}
+@keyframes grow{to{transform:scaleY(1)}}
+.bar span{position:absolute;bottom:100%;left:0;right:0;font-weight:800;font-size:6.4cqw;padding-bottom:1cqw}
+.bar em{position:absolute;top:100%;left:-4cqw;right:-4cqw;font-style:normal;font-size:4.4cqw;font-weight:650;padding-top:1.4cqw}
+.gapmark{position:absolute;right:-17cqw;border:1cqw solid #f46e3b;border-left:0;border-radius:0 2cqw 2cqw 0;width:5cqw}
+.gapmark i{position:absolute;left:7cqw;top:50%;transform:translateY(-50%);font-style:normal;font-weight:800;font-size:5.6cqw;color:#ffde5c;white-space:nowrap}
+
+.big-num{font-size:19cqw;font-weight:800;line-height:1;letter-spacing:-.02em}
+.sub{font-size:5.4cqw;font-weight:650;margin:0}
+.tiny{position:absolute;top:11cqw;right:5cqw;font-size:3.6cqw;font-weight:650;opacity:.75}
+
+.bubble{align-self:flex-start;background:#fff;color:#24363d;font-weight:650;font-size:5.4cqw;padding:2.6cqw 4cqw;border-radius:5cqw 5cqw 5cqw 1cqw;max-width:78cqw;text-align:left}
+.bubble:nth-of-type(2){align-self:flex-end;border-radius:5cqw 5cqw 1cqw 5cqw;background:#9bc4bc}
+.stamp{font-size:15cqw;font-weight:800;color:#fc826d;border:1.4cqw solid #fc826d;border-radius:3cqw;padding:0 4cqw;opacity:0}
+.scene.on .stamp{animation:stamp .4s cubic-bezier(.3,1.6,.5,1) forwards;animation-delay:var(--d,0ms)}
+@keyframes stamp{0%{opacity:0;transform:scale(2.6) rotate(-16deg)}100%{opacity:1;transform:scale(1) rotate(-8deg)}}
+
+.split{position:absolute;inset:0;display:grid;grid-template-rows:1fr 1fr}
+.split>div{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2cqw;padding:10cqw 8cqw}
+.split .emo{font-size:14cqw;line-height:1}
+.split h4{margin:0;font-size:9cqw;font-weight:800}
+.split p{margin:0;font-size:5.6cqw;font-weight:650;max-width:none}
+.split .top{background:#9bc4bc;color:#24363d}
+.split .bot{background:#3c5c68;color:#fff;padding-bottom:30cqw}
+
+.slip{width:100%;background:#fffdf7;color:#24363d;border-radius:3cqw;padding:5cqw;text-align:left;box-shadow:0 2cqw 0 rgba(36,54,61,.25)}
+.slip h4{margin:0 0 3cqw;font-size:6cqw;font-weight:800;border-bottom:.6cqw solid #24363d;padding-bottom:2cqw}
+.slip .row{display:flex;justify-content:space-between;align-items:center;font-size:5.2cqw;font-weight:650;padding:2.2cqw 0;position:relative}
+.slip .row.no{color:#8a8a8a}
+.strike{position:absolute;left:0;right:0;top:50%;height:.9cqw;background:#f46e3b;transform:scaleX(0);transform-origin:left}
+.scene.on .strike{animation:strike .5s ease-out forwards;animation-delay:var(--d,0ms)}
+@keyframes strike{to{transform:scaleX(1)}}
+.ok{color:#5f8f2e;font-weight:800}
+
+.levers{list-style:none;margin:0;padding:0;width:100%;display:flex;flex-direction:column;gap:2.6cqw}
+.levers li{background:rgba(255,255,255,.12);border-radius:3cqw;padding:2.8cqw 4cqw;font-size:6.2cqw;font-weight:750;text-align:left;display:flex;gap:3cqw;align-items:center}
+.levers li span{font-size:7cqw}
+
+.sprout{font-size:16cqw;line-height:1}
+.brand{font-weight:800;font-size:6cqw;letter-spacing:.01em}
+
+/* chrome */
+.progress{position:absolute;top:4cqw;left:4cqw;right:4cqw;display:flex;gap:1cqw;z-index:5}
+.progress i{flex:1;height:.9cqw;border-radius:1cqw;background:rgba(255,255,255,.35);overflow:hidden}
+.progress i b{display:block;height:100%;width:0;background:#fff}
+.rail{position:absolute;right:3cqw;bottom:30cqw;display:flex;flex-direction:column;gap:5cqw;z-index:6;align-items:center}
+.rail button,.rail div{background:none;border:0;padding:0;color:#fff;display:flex;flex-direction:column;align-items:center;font:inherit;font-size:3.4cqw;font-weight:650;gap:.6cqw;cursor:pointer;filter:drop-shadow(0 .4cqw .6cqw rgba(0,0,0,.45))}
+.rail svg{width:10cqw;height:10cqw}
+.rail .liked svg path{fill:#fc826d;stroke:#fc826d}
+.rail .liked svg{animation:heart .35s ease}
+@keyframes heart{50%{transform:scale(1.35)}}
+.meta{position:absolute;left:4cqw;right:18cqw;bottom:5cqw;z-index:6;text-align:left;text-shadow:0 .3cqw .8cqw rgba(0,0,0,.55);color:#fff}
+.meta strong{display:block;font-size:4.4cqw}
+.meta p{font-size:3.8cqw;margin:.8cqw 0;line-height:1.35;max-width:none}
+.sound{overflow:hidden;white-space:nowrap;font-size:3.6cqw;width:60cqw}
+.sound span{display:inline-block;padding-left:100%;animation:ticker 9s linear infinite}
+@keyframes ticker{to{transform:translateX(-100%)}}
+.shade{position:absolute;left:0;right:0;bottom:0;height:42cqw;background:linear-gradient(transparent,rgba(0,0,0,.45));z-index:4;pointer-events:none}
+.center{position:absolute;inset:0;display:none;align-items:center;justify-content:center;z-index:7;pointer-events:none}
+.center span{width:22cqw;height:22cqw;border-radius:50%;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center}
+.center svg{width:10cqw;height:10cqw;fill:#fff}
+.stage.paused .center,.stage.idle .center,.stage.ended .center{display:flex}
+.stage.ended .center .playic{display:none}
+.stage:not(.ended) .center .replay{display:none}
+.stage.paused .scene *, .stage.idle .scene *{animation-play-state:paused !important}
+.hint{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);margin-top:18cqw;text-align:center;font-size:3.8cqw;font-weight:650;z-index:7;pointer-events:none;display:none;text-shadow:0 .3cqw .8cqw rgba(0,0,0,.6)}
+.stage.idle .hint{display:block}
+
+/* DEFINITIONS */
+.defs{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,36px);margin-top:28px}
+.def{border-top:8px solid var(--c);padding-top:18px}
+.def .formula{background:var(--surface);border-radius:10px;padding:12px 14px;font-weight:650;font-size:.98rem;margin-top:10px}
+.chart{margin-top:44px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:end;background:var(--surface);border-radius:18px;padding:28px clamp(18px,3vw,36px)}
+.vbars{display:flex;gap:26px;align-items:flex-end;height:220px;position:relative;padding-right:120px}
+.vbar{width:78px;border-radius:10px 10px 0 0;position:relative;background:var(--c)}
+.vbar span{position:absolute;bottom:100%;left:0;right:0;text-align:center;font-weight:800;font-size:1.3rem;padding-bottom:4px}
+.vbar em{position:absolute;top:100%;left:-10px;right:-10px;text-align:center;font-style:normal;font-weight:650;font-size:.92rem;padding-top:6px}
+.vgap{position:absolute;right:20px;border:4px solid var(--gap);border-left:0;border-radius:0 8px 8px 0;width:16px}
+.vgap b{position:absolute;left:26px;top:50%;transform:translateY(-50%);white-space:nowrap;color:var(--gap);font-size:1.15rem}
+.chart-copy p{margin-bottom:.6em}
+.chart-wrap{padding-bottom:34px}
+
+/* CALCULATOR */
+.calc{background:var(--surface-2);border-radius:22px;padding:clamp(22px,4vw,44px);display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(24px,4vw,56px)}
+.fields{display:flex;flex-direction:column;gap:16px}
+label{display:flex;flex-direction:column;gap:6px;font-weight:650}
+input{font:inherit;font-size:1.25rem;font-weight:700;padding:10px 14px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+input:focus-visible{outline:3px solid var(--focus);outline-offset:1px}
+.outs{display:grid;grid-template-columns:1fr 1fr;gap:22px 28px;align-content:start}
+.out small{display:block;font-weight:650;color:var(--ink-soft);font-size:.95rem}
+.out b{display:block;font-size:clamp(1.8rem,3.6vw,2.6rem);line-height:1.1;font-variation-settings:"wdth" 80;letter-spacing:-.01em}
+.out.hero-out{grid-column:1/-1;border-top:3px solid var(--ink);padding-top:16px}
+.out.hero-out b{font-size:clamp(2.4rem,5.4vw,3.8rem);color:var(--good)}
+.warn{grid-column:1/-1;font-weight:650;color:var(--gap);margin:0;min-height:1.2em}
+
+/* WHERE THEORETICAL POINTS */
+.points{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:26px;border-top:2px solid var(--line)}
+.points div{padding:18px 18px 18px 0;border-bottom:2px solid var(--line)}
+.points h3{font-size:1.15rem}
+.points p{margin:0;color:var(--ink-soft);font-size:.98rem}
+
+/* TRAP */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,48px);margin-top:30px}
+.path h3{margin-bottom:14px}
+.steps{list-style:none;margin:0;padding:0;position:relative}
+.steps li{position:relative;padding:0 0 22px 34px;font-weight:600}
+.steps li::before{content:"";position:absolute;left:7px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--c)}
+.steps li::after{content:"";position:absolute;left:12px;top:22px;bottom:2px;width:2px;background:var(--line)}
+.steps li:last-child::after{display:none}
+.steps li:last-child{font-size:1.35rem;font-weight:800;color:var(--c2)}
+.path.a{--c:var(--ink-soft);--c2:var(--gap)}
+.path.b{--c:var(--good);--c2:var(--good)}
+.jobs{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,48px);margin-top:44px;padding-top:30px;border-top:2px solid var(--line)}
+.jobs .when{font-weight:800;color:var(--gap)}
+.pull{font-size:clamp(1.4rem,2.6vw,1.9rem);font-weight:750;line-height:1.25;max-width:30ch;margin-top:40px;font-variation-settings:"wdth" 88}
+
+/* LEVERS */
+.levlist{counter-reset:lv;list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:26px clamp(24px,4vw,56px)}
+.levlist li{counter-increment:lv;display:grid;grid-template-columns:64px 1fr;gap:6px 14px}
+.levlist li::before{content:counter(lv);grid-row:span 2;font-size:3rem;font-weight:800;line-height:.9;color:var(--theo);font-variation-settings:"wdth" 75}
+.levlist p{margin:0;color:var(--ink-soft)}
+
+/* CLOSE */
+.close{background:#3c5c68;color:#fff;padding:clamp(56px,9vw,110px) 0}
+.close h2{color:#ffde5c;font-size:clamp(2.3rem,5.6vw,4.4rem);font-weight:800;max-width:16ch}
+.close p{color:#e6f0ec;font-size:1.2rem}
+footer{padding:28px 0 40px;font-size:.88rem;color:var(--ink-soft)}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}
+  .defs,.points{grid-template-columns:1fr}
+  .calc{grid-template-columns:1fr}
+  .paths,.jobs,.levlist{grid-template-columns:1fr}
+  .chart{grid-template-columns:1fr}
+}
+@media (max-width:420px){.outs{grid-template-columns:1fr}.vbars{padding-right:100px}}
+@media (prefers-reduced-motion: reduce){
+  .scene.on .w,.scene.on .in,.scene.on .bar,.scene.on .stamp,.scene.on .strike{animation-duration:.01ms !important;animation-delay:0ms !important}
+  .sound span{animation:none;padding-left:0}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap hero">
+  <div>
+    <h1>Theoretical is the map. Actual is the bank.</h1>
+    <p class="lead">Every food cost report hands you two numbers. Theoretical tells you where to look. Actual tells you what we paid. Only one of them shows up in the bank account, so that is the one we manage every shift.</p>
+    <p class="rule">The system might be wrong. The bank is never wrong.</p>
+  </div>
+
+  <div class="phone-col">
+    <div class="stage idle" id="stage" tabindex="0" role="region" aria-roledescription="video" aria-label="Short video: actual vs theoretical food cost. Space to play or pause, arrow keys to skip.">
+      <div class="progress" id="progress" aria-hidden="true"></div>
+
+      <div class="scene s-teal" data-dur="5200">
+        <p class="kicker in" style="--d:0ms">POV: the P&amp;L just landed 🧾</p>
+        <p class="cap" data-d="500">Your food cost has two numbers.</p>
+        <p class="cap hl" data-d="2500">Only one pays the bills.</p>
+      </div>
+
+      <div class="scene s-sage" data-dur="6400">
+        <span class="chip dark in" style="--d:0ms">Theoretical</span>
+        <div class="eq">
+          <div class="tile in" style="--d:500ms"><b>🍳</b>Recipe cost</div>
+          <span class="op in" style="--d:900ms">×</span>
+          <div class="tile in" style="--d:1200ms"><b>🎟️</b>Items sold</div>
+        </div>
+        <div class="result in" style="--d:1900ms">= 29.5%</div>
+        <p class="cap sm" data-d="2600">What we should have spent.</p>
+        <p class="cap sm hl" data-d="4100">If every plate matched the recipe.</p>
+      </div>
+
+      <div class="scene s-teal" data-dur="6600">
+        <span class="chip in" style="--d:0ms">Actual</span>
+        <div class="ledger">
+          <div class="in" style="--d:500ms"><span>Start count</span><span>📦</span></div>
+          <div class="in" style="--d:1000ms"><span>plus purchases</span><span>🚚</span></div>
+          <div class="in" style="--d:1500ms"><span>minus end count</span><span>📋</span></div>
+          <div class="in" style="--d:2000ms"><span>÷ food sales</span><span>32.4%</span></div>
+        </div>
+        <p class="cap sm" data-d="2800">What we actually spent.</p>
+        <p class="cap sm hl" data-d="4200">Built from invoices. Not opinions.</p>
+      </div>
+
+      <div class="scene s-deep" data-dur="5600">
+        <span class="tiny">Example numbers</span>
+        <div class="bars">
+          <div class="bar" style="height:31cqw;background:#9bc4bc;--d:200ms"><span>29.5%</span><em>Theoretical</em></div>
+          <div class="bar" style="height:51cqw;background:#e6f0ec;color:#fff;--d:600ms"><span>32.4%</span><em>Actual</em></div>
+          <div class="gapmark in" style="top:calc(100% - 51cqw);height:20cqw;--d:1500ms"><i>2.9 pts</i></div>
+        </div>
+        <p class="cap" data-d="2000" style="margin-top:8cqw">That gap is your variance.</p>
+      </div>
+
+      <div class="scene s-yellow" data-dur="7200">
+        <span class="tiny">Example math</span>
+        <p class="sub in" style="--d:0ms">2.9 points on $30K a week of food sales</p>
+        <div class="big-num"><span class="count" data-to="870" data-d="700" data-len="1300" data-pre="$">$0</span></div>
+        <p class="sub in" style="--d:1000ms">gone every week</p>
+        <div class="big-num in" style="--d:2600ms"><span class="count" data-to="45240" data-d="2700" data-len="1500" data-pre="$">$0</span></div>
+        <p class="sub in" style="--d:2900ms">a year. One restaurant.</p>
+        <p class="cap sm hl" data-d="4800">Not a rounding error.</p>
+      </div>
+
+      <div class="scene s-deep" data-dur="7600">
+        <div class="bubble in" style="--d:200ms">“The system is wrong.”</div>
+        <div class="bubble in" style="--d:1100ms">“The recipe costs are off.”</div>
+        <div class="bubble in" style="--d:2000ms">“Somebody miscounted.”</div>
+        <div class="stamp" style="--d:3100ms">Maybe.</div>
+        <p class="cap hl" data-d="4300">The bank still got charged.</p>
+      </div>
+
+      <div class="scene" data-dur="6200" style="background:#3c5c68">
+        <div class="split">
+          <div class="top">
+            <span class="emo in" style="--d:100ms">🗺️</span>
+            <h4 class="in" style="--d:300ms">Theoretical</h4>
+            <p class="in" style="--d:700ms">tells you where to look</p>
+          </div>
+          <div class="bot">
+            <span class="emo in" style="--d:1600ms">🧾</span>
+            <h4 class="in" style="--d:1800ms">Actual</h4>
+            <p class="in" style="--d:2200ms">tells you what it cost</p>
+            <p class="cap sm hl" data-d="3400" style="margin-top:4cqw">Use the map. Manage the receipt.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene s-green" data-dur="6000">
+        <div class="slip in" style="--d:0ms">
+          <h4>Deposit slip 🏦</h4>
+          <div class="row no"><span>Theoretical savings</span><span>$0.00</span><i class="strike" style="--d:1200ms"></i></div>
+          <div class="row in" style="--d:2000ms"><span>Actual savings</span><span class="ok">$870 ✓</span></div>
+        </div>
+        <p class="cap hl" data-d="3000">The bank only takes actual.</p>
+      </div>
+
+      <div class="scene s-teal" data-dur="7400">
+        <p class="cap sm" data-d="0">What moves actual 👇</p>
+        <ul class="levers">
+          <li class="in" style="--d:800ms"><span>📦</span>Receive it right</li>
+          <li class="in" style="--d:1700ms"><span>🔪</span>Prep to par</li>
+          <li class="in" style="--d:2600ms"><span>⚖️</span>Portion every plate</li>
+          <li class="in" style="--d:3500ms"><span>🗑️</span>Log every waste</li>
+          <li class="in" style="--d:4400ms"><span>🧾</span>Ring every comp</li>
+        </ul>
+      </div>
+
+      <div class="scene s-coral" data-dur="6400">
+        <p class="cap" data-d="200">Fix the system on Monday.</p>
+        <p class="cap hl" data-d="1900">Close the gap today.</p>
+        <div class="sprout in" style="--d:3400ms">🌱</div>
+        <div class="brand in" style="--d:3700ms">Morning Belle</div>
+      </div>
+
+      <div class="shade"></div>
+      <div class="rail">
+        <button type="button" id="like" aria-label="Like" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.5 8 3.6 4.5 7 4.5c2 0 3.6 1.1 5 3 1.4-1.9 3-3 5-3 3.4 0 5.5 3.5 4.3 6.8-1.8 4.6-9.3 9.2-9.3 9.2z" fill="#fff" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          <span>Like</span>
+        </button>
+        <div aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 5.5h16v10H9l-5 4v-14z" fill="#fff"/></svg><span>Ask</span>
+        </div>
+        <div aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M6 3.5h12v17l-6-4.2-6 4.2v-17z" fill="#fff"/></svg><span>Save</span>
+        </div>
+      </div>
+      <div class="meta" aria-hidden="true">
+        <strong>Morning Belle Kitchen Leaders</strong>
+        <p>Actual vs theoretical in 60 seconds 🌱 #FoodCost #Gardeners</p>
+        <div class="sound"><span>♪ Original sound, Morning Belle</span></div>
+      </div>
+      <div class="center" aria-hidden="true"><span>
+        <svg class="playic" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg>
+        <svg class="replay" viewBox="0 0 24 24"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>
+      </span></div>
+      <div class="hint" aria-hidden="true">Tap to play. Tap the sides to skip.</div>
+    </div>
+
+    <details class="script">
+      <summary>Read the script</summary>
+      <ol>
+        <li>Your food cost has two numbers. Only one pays the bills.</li>
+        <li>Theoretical: recipe cost times items sold. What we should have spent if every plate matched the recipe.</li>
+        <li>Actual: start count, plus purchases, minus end count, divided by food sales. Built from invoices.</li>
+        <li>The gap between them is your variance.</li>
+        <li>Example: 2.9 points on $30K a week is $870 a week and $45,240 a year at one restaurant.</li>
+        <li>“The system is wrong.” Maybe. The bank still got charged.</li>
+        <li>Theoretical tells you where to look. Actual tells you what it cost.</li>
+        <li>The bank only takes actual.</li>
+        <li>What moves actual: receive it right, prep to par, portion every plate, log every waste, ring every comp.</li>
+        <li>Fix the system on Monday. Close the gap today.</li>
+      </ol>
+    </details>
+  </div>
+</header>
+
+<main>
+<section class="wrap" id="two-numbers">
+  <h2>Two numbers, one report</h2>
+  <p class="lead">They measure different things. Mixing them up is how good managers lose a period arguing.</p>
+  <div class="defs">
+    <div class="def" style="--c:var(--theo)">
+      <h3>Theoretical food cost</h3>
+      <p>What food should have cost, based on what we sold and what each recipe calls for. It assumes perfect portions, zero waste, accurate recipe costs, and every comp rung in.</p>
+      <div class="formula">Recipe cost × items sold, divided by food sales</div>
+    </div>
+    <div class="def" style="--c:var(--act)">
+      <h3>Actual food cost</h3>
+      <p>What food did cost. It comes from invoices and inventory counts, not from recipe cards. It is the number that matches the money that left our account.</p>
+      <div class="formula">Starting inventory plus purchases minus ending inventory, divided by food sales</div>
+    </div>
+    <div class="def" style="--c:var(--gap)">
+      <h3>Variance</h3>
+      <p>Actual minus theoretical. Every point of variance is product we paid for that never became a sale. It is the size of the opportunity, not a grade on the software.</p>
+      <div class="formula">Actual % minus theoretical %</div>
+    </div>
+  </div>
+
+  <div class="chart">
+    <div class="chart-wrap">
+      <div class="vbars" role="img" aria-label="Example: theoretical 29.5 percent, actual 32.4 percent, a gap of 2.9 points">
+        <div class="vbar" style="--c:var(--theo);height:90px"><span>29.5%</span><em>Theoretical</em></div>
+        <div class="vbar" style="--c:var(--act);height:148px"><span>32.4%</span><em>Actual</em></div>
+        <div class="vgap" style="bottom:90px;height:58px"><b>2.9 pts</b></div>
+      </div>
+    </div>
+    <div class="chart-copy">
+      <h3>Read the gap, not the software</h3>
+      <p>Theoretical is the floor we could hit if the kitchen ran perfectly. Actual is where we landed. The space between them is money we can still win back.</p>
+      <p class="note">Example numbers for illustration. Chart axis starts above zero so the gap is visible.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="calculator" style="padding-top:0">
+  <h2>What your gap costs</h2>
+  <p class="lead">Plug in the numbers from your weekly report. Variance stops being abstract the second it has a dollar sign.</p>
+  <div class="calc">
+    <div class="fields">
+      <label>Weekly food sales ($)
+        <input id="sales" type="number" inputmode="decimal" min="0" step="100" value="30000">
+      </label>
+      <label>Theoretical food cost (%)
+        <input id="theo" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="29.5">
+      </label>
+      <label>Actual food cost (%)
+        <input id="act" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="32.4">
+      </label>
+      <p class="note">Defaults are example numbers, not a real restaurant.</p>
+    </div>
+    <div class="outs" aria-live="polite">
+      <div class="out"><small>Gap</small><b id="o-gap">2.9 pts</b></div>
+      <div class="out"><small>Per week</small><b id="o-week">$870</b></div>
+      <div class="out"><small>Per year</small><b id="o-year">$45,240</b></div>
+      <div class="out"><small>Per day, open 7</small><b id="o-day">$124</b></div>
+      <div class="out hero-out"><small>Close half the gap and this goes to the bank every year</small><b id="o-half">$22,620</b></div>
+      <p class="warn" id="o-warn"></p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="why-theoretical" style="padding-top:0">
+  <h2>Why theoretical still matters</h2>
+  <p class="lead">Theoretical is a diagnostic, not a destination. When the gap opens, it points at one of these.</p>
+  <div class="points">
+    <div><h3>Portioning</h3><p>Heavy hands on a high volume item move the number fastest.</p></div>
+    <div><h3>Waste</h3><p>Overprep, dropped plates, expired product, remakes.</p></div>
+    <div><h3>Receiving</h3><p>Short cases, wrong weights, price increases nobody caught.</p></div>
+    <div><h3>Comps and voids</h3><p>Food that left the kitchen without a ticket behind it.</p></div>
+    <div><h3>Counting</h3><p>Different units, different shelves, different day each count.</p></div>
+    <div><h3>The system</h3><p>An outdated recipe or price. Real, fixable, and only one item on this list.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="the-trap" style="padding-top:0">
+  <h2>The “system is wrong” trap</h2>
+  <p class="lead">Sometimes the system is wrong. That is worth fixing. It is not worth stopping for, because fixing the report never moved a dollar into the bank.</p>
+  <div class="paths">
+    <div class="path a">
+      <h3>Argue the number</h3>
+      <ol class="steps">
+        <li>Theoretical looks off</li>
+        <li>Meeting about recipe cards and software</li>
+        <li>Nobody changes a portion or a par</li>
+        <li>Same gap next period</li>
+        <li>$0 back</li>
+      </ol>
+    </div>
+    <div class="path b">
+      <h3>Work the number</h3>
+      <ol class="steps">
+        <li>Theoretical looks off</li>
+        <li>Flag the suspect item for a recipe check, then move on</li>
+        <li>Walk the line, check the dock, audit the waste log</li>
+        <li>Gap shrinks</li>
+        <li>Money in the bank</li>
+      </ol>
+    </div>
+  </div>
+  <div class="jobs">
+    <div>
+      <h3>Fix the system</h3>
+      <p class="when">Weekly task</p>
+      <p>Flag the item, verify the recipe and current price, update it. This makes the report more accurate. It does not change what we paid.</p>
+    </div>
+    <div>
+      <h3>Manage actual</h3>
+      <p class="when">Every shift</p>
+      <p>Receiving, prep, portions, waste, comps, counts. This is the only work that changes the number on the deposit.</p>
+    </div>
+  </div>
+  <p class="pull">Even when theoretical is wrong, actual is right about one thing: what we paid.</p>
+</section>
+
+<section class="wrap" id="levers" style="padding-top:0">
+  <h2>Six levers, dock to plate</h2>
+  <p class="lead">Follow the food through the building. Every lever is something a manager controls on a shift.</p>
+  <ol class="levlist">
+    <li><h3>Receive it right</h3><p>Check weights, counts, and prices against the invoice before the driver leaves. A credit you never ask for is product you paid for and never got.</p></li>
+    <li><h3>Prep to par</h3><p>Prep what the day needs, not what feels safe. Overprep on Friday is waste on Sunday.</p></li>
+    <li><h3>Portion every plate</h3><p>Scoops, scales, and spec cards on the line. Small overportions on a top seller add up faster than anything else.</p></li>
+    <li><h3>Log every waste</h3><p>If it hits the trash, it hits the log. You cannot fix what you cannot see.</p></li>
+    <li><h3>Ring every comp</h3><p>Food that leaves without a ticket still shows up on the invoice.</p></li>
+    <li><h3>Count it the same way</h3><p>Same day, same order, same units, every count. A bad count makes both numbers lie.</p></li>
+  </ol>
+</section>
+</main>
+
+<section class="close">
+  <div class="wrap">
+    <h2>Fix the system on Monday. Close the gap today.</h2>
+    <p>Theoretical points. Actual pays. 🌱</p>
+  </div>
+</section>
+
+<footer class="wrap">Morning Belle kitchen leadership. Example numbers on this page are illustrations, not restaurant results.</footer>
+
+<script>
+(function(){
+  const stage=document.getElementById('stage');
+  const scenes=[...stage.querySelectorAll('.scene')];
+  const prog=document.getElementById('progress');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // split captions into words
+  stage.querySelectorAll('.cap').forEach(c=>{
+    const base=+(c.dataset.d||0);
+    const words=c.textContent.trim().split(/\s+/);
+    c.setAttribute('aria-label',words.join(' '));
+    c.textContent='';
+    words.forEach((w,i)=>{
+      const s=document.createElement('span');
+      s.className='w';s.textContent=w;s.setAttribute('aria-hidden','true');
+      s.style.setProperty('--d',(base+i*120)+'ms');
+      c.appendChild(s);c.appendChild(document.createTextNode(' '));
+    });
+  });
+  const segs=scenes.map(()=>{const i=document.createElement('i');const b=document.createElement('b');i.appendChild(b);prog.appendChild(i);return b;});
+  let idx=0,t=0,playing=false,last=null,ended=false,started=false;
+  const fmt=n=>'$'+Math.round(n).toLocaleString('en-US');
+  function show(i){
+    scenes.forEach(s=>s.classList.remove('on'));
+    void stage.offsetWidth;
+    idx=Math.max(0,Math.min(scenes.length-1,i));t=0;
+    scenes[idx].classList.add('on');
+  }
+  function render(){
+    segs.forEach((b,i)=>{b.style.width=(i<idx?100:i>idx?0:Math.min(100,t/+scenes[idx].dataset.dur*100))+'%';});
+    scenes[idx].querySelectorAll('.count').forEach(el=>{
+      const d=+el.dataset.d,len=+el.dataset.len,to=+el.dataset.to;
+      let p=Math.max(0,Math.min(1,(t-d)/len));
+      if(reduce&&t>=d)p=1;
+      p=1-Math.pow(1-p,3);
+      el.textContent=fmt(to*p);
+    });
+  }
+  function tick(now){
+    if(last===null)last=now;
+    const dt=Math.min(100,now-last);last=now;
+    if(playing){
+      t+=dt;
+      if(t>=+scenes[idx].dataset.dur){
+        if(idx<scenes.length-1)show(idx+1);
+        else{playing=false;ended=true;t=+scenes[idx].dataset.dur;stage.classList.add('ended');}
+      }
+    }
+    render();
+    requestAnimationFrame(tick);
+  }
+  function play(){
+    started=true;
+    if(ended){ended=false;show(0);}
+    playing=true;stage.classList.remove('paused','idle','ended');
+  }
+  function pause(){playing=false;stage.classList.add('paused');}
+  function toggle(){playing?pause():play();}
+  function go(n){
+    if(ended){ended=false;stage.classList.remove('ended');}
+    show(n);
+    if(!playing){started=true;playing=true;stage.classList.remove('paused','idle');}
+  }
+  stage.addEventListener('click',e=>{
+    if(e.target.closest('#like'))return;
+    const r=stage.getBoundingClientRect();const x=(e.clientX-r.left)/r.width;
+    if(!started||ended||x>.3&&x<.7)toggle();
+    else if(x<=.3)go(t<800?idx-1:idx);
+    else go(idx+1);
+  });
+  stage.addEventListener('keydown',e=>{
+    if(e.key===' '||e.key==='Enter'){e.preventDefault();toggle();}
+    else if(e.key==='ArrowRight'){e.preventDefault();go(idx+1);}
+    else if(e.key==='ArrowLeft'){e.preventDefault();go(idx-1);}
+  });
+  const like=document.getElementById('like');
+  like.addEventListener('click',()=>{const on=like.classList.toggle('liked');like.setAttribute('aria-pressed',on);});
+  show(0);requestAnimationFrame(tick);
+  if(!reduce&&'IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>{es.forEach(en=>{
+      if(en.isIntersecting&&!started){play();}
+      else if(!en.isIntersecting&&playing){pause();}
+    });},{threshold:.6});
+    io.observe(stage);
+  }
+
+  // calculator
+  const $=id=>document.getElementById(id);
+  function calc(){
+    const s=parseFloat($('sales').value)||0,th=parseFloat($('theo').value)||0,ac=parseFloat($('act').value)||0;
+    const gap=ac-th;const g=Math.max(0,gap);
+    const week=s*g/100,year=week*52;
+    $('o-gap').textContent=gap.toFixed(1)+' pts';
+    $('o-week').textContent=fmt(week);
+    $('o-year').textContent=fmt(year);
+    $('o-day').textContent=fmt(week/7);
+    $('o-half').textContent=fmt(year/2);
+    $('o-warn').textContent=gap<0?'Actual is under theoretical. Check the count and receiving before you celebrate. That usually means a counting error, not a great week.':'';
+  }
+  ['sales','theo','act'].forEach(id=>$(id).addEventListener('input',calc));
+  calc();
+})();
+</script>
+</body>
+</html>
